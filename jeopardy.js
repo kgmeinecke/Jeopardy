@@ -27,7 +27,7 @@ let categories = [];
 
 function getCategoryIds() {
   const numCategories = Math.floor(Math.random() * 18418) + 1;
-  return numCategories;
+  getCategory(numCategories);
   //   categoryIds = [];
   //   for (let i = 0; i < 6; i++) {
   //     const numCategories = Math.floor(Math.random() * 18418) + 1;
@@ -49,11 +49,11 @@ function getCategoryIds() {
  */
 async function getCategory(catId) {
   // get random id number
-  let id = getCategoryIds();
+  //let id = getCategoryIds();
 
   // make api call for id
   const response = await axios.get(
-    `http://jservice.io/api/clues?category=${id}`
+    `http://jservice.io/api/clues?category=${catId}`
   );
 
   // add questions and answeres to the clueArray
@@ -84,7 +84,35 @@ async function getCategory(catId) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {}
+async function fillTable() {
+  // delete thead contents
+  const $tableHead = $("thead");
+  $tableHead.empty();
+  // delete tbody contents
+  const $tableBody = $("tbody");
+  $tableBody.empty();
+
+  // create table head
+  let $tr = $("<tr></tr>");
+  for (let i = 0; i < 6; i++) {
+    let $td = $(`<td>temp${i + 1}</td>`);
+    $tr.append($td);
+  }
+  $tableHead.append($tr);
+
+  // create table body
+  for (let x = 0; x < 5; x++) {
+    let $tr = $(`<tr></tr>`);
+
+    for (let y = 0; y < 6; y++) {
+      let $td = $(
+        `<td id="${y}-${x}"><i class="fas fa-question fa-4x"></i></td>`
+      );
+      $tr.append($td);
+    }
+    $tableBody.append($tr);
+  }
+}
 
 /** Handle clicking on a clue: show the question or answer.
  *
