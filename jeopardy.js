@@ -130,24 +130,30 @@ async function fillTable() {
  * */
 
 $("tbody").on("click", "td", function handleClick(evt) {
-  //console.log($(evt.target).closest("td")[0].id);
+  // set square = to the "id" of clicked 'td'
   let square = $(evt.target).closest("td")[0].id;
-
+  // set categoriesIndex to seach the categories array based of first character of the 'id'
   let categoriesIndex = square.charAt(0);
+  // set cluesArrayIndex to seach clues array based of last character of the 'id'
   let cluesArrayIndex = square.charAt(2);
 
-  let tempArr = categories[categoriesIndex];
-  let tempClue = tempArr.clues[cluesArrayIndex].question;
-  console.log(tempClue);
+  // set clue variable
+  let clue = categories[categoriesIndex].clues[cluesArrayIndex].question;
+  // set answer variable
+  let answer = categories[categoriesIndex].clues[cluesArrayIndex].answer;
 
-  $(evt.target).closest("td").html(tempClue);
+  // check the showing property, update html, updated showing property
+  if (categories[categoriesIndex].clues[cluesArrayIndex].showing === null) {
+    $(evt.target).closest("td").html(clue);
+    categories[categoriesIndex].clues[cluesArrayIndex].showing = "question";
+  } else if (
+    categories[categoriesIndex].clues[cluesArrayIndex].showing === "question"
+  ) {
+    $(evt.target).closest("td").html(answer);
+    categories[categoriesIndex].clues[cluesArrayIndex].showing = "answer";
+  }
 
   //let temp = categories[categoriesIndex].clues.length;
-
-  //console.log("column = " + square.charAt(0));
-  //console.log("row = " + square.charAt(2));
-
-  //console.log($(evt.target).closest("td").html());
 });
 
 /** Start game:
@@ -165,6 +171,10 @@ async function setupAndStart() {
 /** On click of restart button, restart game. */
 
 // TODO
+
+$("#restart").on("click", function restart() {
+  setupAndStart();
+});
 
 /** On page load, setup and start & add event handler for clicking clues */
 
