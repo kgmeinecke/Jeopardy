@@ -25,15 +25,22 @@ let categories = [];
  * Returns array of category ids
  */
 
-function getCategoryIds() {
-  const numCategories = Math.floor(Math.random() * 18418) + 1;
-  getCategory(numCategories);
-  //   categoryIds = [];
-  //   for (let i = 0; i < 6; i++) {
-  //     const numCategories = Math.floor(Math.random() * 18418) + 1;
-  //     categoryIds.push(numCategories);
-  //   }
-  //   return categoryIds;
+async function getCategoryIds() {
+  categories = [];
+  let tempArr = [];
+
+  // generates a random id number and checks to make sure there aren't dupplicates
+  while (tempArr.length < 6) {
+    const numCategories = Math.floor(Math.random() * 18418) + 1;
+    if (!tempArr.includes(numCategories)) {
+      tempArr.push(numCategories);
+    }
+  }
+
+  // calls getCategory function with id
+  for (let id of tempArr) {
+    await getCategory(id);
+  }
 }
 
 /** Return object with data about a category:
@@ -57,7 +64,7 @@ async function getCategory(catId) {
   );
 
   // add questions and answeres to the clueArray
-  let clueArray = response.data.map((result) => {
+  let cluesArray = response.data.map((result) => {
     let idx = result;
     return {
       question: idx.question,
@@ -68,8 +75,8 @@ async function getCategory(catId) {
 
   // create category object
   let category = {
-    title: response.data[0].category.title,
-    clues: clueArray,
+    title: response.data[0].category.title.toUpperCase(),
+    clues: cluesArray,
   };
 
   // push category object to the categories array
@@ -92,11 +99,11 @@ async function fillTable() {
   const $tableBody = $("tbody");
   $tableBody.empty();
 
-  // create table head
+  // creat table head
   let $tr = $("<tr></tr>");
-  for (let i = 0; i < 6; i++) {
-    let $td = $(`<td>temp${i + 1}</td>`);
-    $tr.append($td);
+  for (let idx of categories) {
+    let $th = $(`<th>${idx.title}</th>`);
+    $tr.append($th);
   }
   $tableHead.append($tr);
 
@@ -122,7 +129,26 @@ async function fillTable() {
  * - if currently "answer", ignore click
  * */
 
-function handleClick(evt) {}
+$("tbody").on("click", "td", function handleClick(evt) {
+  //console.log($(evt.target).closest("td")[0].id);
+  let square = $(evt.target).closest("td")[0].id;
+
+  let categoriesIndex = square.charAt(0);
+  let cluesArrayIndex = square.charAt(2);
+
+  let tempArr = categories[categoriesIndex];
+  let tempClue = tempArr.clues[cluesArrayIndex].question;
+  console.log(tempClue);
+
+  $(evt.target).closest("td").html(tempClue);
+
+  //let temp = categories[categoriesIndex].clues.length;
+
+  //console.log("column = " + square.charAt(0));
+  //console.log("row = " + square.charAt(2));
+
+  //console.log($(evt.target).closest("td").html());
+});
 
 /** Start game:
  *
@@ -131,7 +157,10 @@ function handleClick(evt) {}
  * - create HTML table
  * */
 
-async function setupAndStart() {}
+async function setupAndStart() {
+  await getCategoryIds();
+  fillTable();
+}
 
 /** On click of restart button, restart game. */
 
@@ -140,3 +169,5 @@ async function setupAndStart() {}
 /** On page load, setup and start & add event handler for clicking clues */
 
 // TODO
+
+setupAndStart();

@@ -1,3 +1,9 @@
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
 #jeopardy {
   text-align: center;
   font-size: 9pt;
@@ -6,7 +12,8 @@
   border-collapse: collapse;
 }
 
-#jeopardy th, #jeopardy td {
+#jeopardy th,
+#jeopardy td {
   border: solid 1px white;
   width: 12em;
   padding: 1em;
@@ -16,15 +23,34 @@ th {
   text-transform: uppercase;
   font-family: Helvetica, sans-serif;
   font-weight: bold;
-  height: 4em;
-  text-shadow: darkgoldenrod 1px 1px;
+  height: 3em;
+  text-shadow: rgb(114, 100, 100) 1px 1px;
 }
 
 td {
-  height: 9em;
+  height: 7.2em;
   font-family: Copse, serif;
 }
 
-td:hover {
+tbody td:hover {
   cursor: pointer;
+}
+
+button {
+  height: 2.5rem;
+  color: #fff;
+  background-color: rgb(17, 170, 17);
+  font-size: 20px;
+}
+
+button:hover {
+  background-color: rgb(7, 126, 7);
+}
+
+i {
+  text-shadow: rgb(114, 100, 100) 1px 1px;
+}
+
+i:hover {
+  color: rgb(187, 161, 161);
 }
