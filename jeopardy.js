@@ -64,7 +64,7 @@ async function getCategory(catId) {
   );
 
   // add questions and answeres to the clueArray
-  let cluesArray = response.data.map((result) => {
+  let tempCluesArray = response.data.map((result) => {
     let idx = result;
     return {
       question: idx.question,
@@ -72,6 +72,28 @@ async function getCategory(catId) {
       showing: null,
     };
   });
+
+  // declare temp variables
+  let num = tempCluesArray.length;
+  let tempArray = [];
+  let cluesArray = [];
+
+  // pick random set of number from num
+  while (tempArray.length < 5) {
+    const idx = Math.floor(Math.random() * num);
+    if (!tempArray.includes(idx)) {
+      tempArray.push(idx);
+    }
+  }
+
+  // shuffle tempCluesArray
+  for (let i = 0; i < num; i++) {
+    for (let num of tempArray) {
+      if (i === num) {
+        cluesArray.push(tempCluesArray[i]);
+      }
+    }
+  }
 
   // create category object
   let category = {
@@ -141,19 +163,17 @@ $("tbody").on("click", "td", function handleClick(evt) {
   let clue = categories[categoriesIndex].clues[cluesArrayIndex].question;
   // set answer variable
   let answer = categories[categoriesIndex].clues[cluesArrayIndex].answer;
+  // create temporary arra
+  let tempArray = categories[categoriesIndex].clues[cluesArrayIndex];
 
   // check the showing property, update html, updated showing property
-  if (categories[categoriesIndex].clues[cluesArrayIndex].showing === null) {
+  if (tempArray.showing === null) {
     $(evt.target).closest("td").html(clue);
-    categories[categoriesIndex].clues[cluesArrayIndex].showing = "question";
-  } else if (
-    categories[categoriesIndex].clues[cluesArrayIndex].showing === "question"
-  ) {
+    tempArray.showing = "question";
+  } else if (tempArray.showing === "question") {
     $(evt.target).closest("td").html(answer);
-    categories[categoriesIndex].clues[cluesArrayIndex].showing = "answer";
+    tempArray.showing = "answer";
   }
-
-  //let temp = categories[categoriesIndex].clues.length;
 });
 
 /** Start game:
