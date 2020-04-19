@@ -1,6 +1,6 @@
 # Jeopardy
 
 ###Demo
-![Jeopardy Gif](gifs/jeopardy.gif)
+![Jeopardy Gif](gifs/Jeopardy.gif)
 
 ###Play Jeopardy
